@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import android.Manifest
+import com.graphhopper.GraphHopper
 
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
@@ -17,13 +18,14 @@ class MainActivity : AppCompatActivity()  {
     val permission = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+    public var i = 0
 
     interface Locationcall{
-        fun locget(lat: Double, lon: Double)
-        fun locnoget(msg: String)
+        fun locget (lat: Double, lon: Double)
+        fun locnoget (msg: String)
     }
 
-    fun steLocation( cal: Locationcall) {
+    fun steLocation(cal: Locationcall) {
         val flc = LocationServices.getFusedLocationProviderClient(this)
 
         try {
@@ -53,6 +55,7 @@ class MainActivity : AppCompatActivity()  {
             }
         })
     }
+private lateinit var mapapi : Mapsapi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +74,12 @@ class MainActivity : AppCompatActivity()  {
         } else {
             stealLocation()
         }
+        val maphopper = GraphHopper()
+
+        val lastlat : Double = 0.0
+        val lastlon : Double = 0.0
+        mapapi = Mapsapi(this, maphopper, lastlat, lastlon)
+        mapapi.rout()
     }
     override fun onRequestPermissionsResult(
         requestcode: Int,
@@ -81,6 +90,7 @@ class MainActivity : AppCompatActivity()  {
         if (requestcode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResult.isNotEmpty() && grantResult[0] == PackageManager.PERMISSION_GRANTED) {
                 stealLocation()
+                i = 1
             } else {
                 Toast.makeText(this, "location permission denied", Toast.LENGTH_SHORT).show()
             }
