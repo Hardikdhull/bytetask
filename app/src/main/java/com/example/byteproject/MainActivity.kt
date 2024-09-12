@@ -11,12 +11,49 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import android.Manifest
 
+
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity()  {
     val permission = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+    interface Locationcall{
+        fun locget(lat: Double, lon: Double)
+        fun locnoget(msg: String)
+    }
+
+    fun steLocation( cal: Locationcall) {
+        val flc = LocationServices.getFusedLocationProviderClient(this)
+
+        try {
+            flc.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val lat = location.latitude
+                    val lon = location.longitude
+                    cal.locget(lat, lon)
+                } else {
+                    cal.locnoget("loction provided is not provided")
+                }
+            }
+        } catch (e: SecurityException){
+            e.printStackTrace()
+        }
+    }
+    fun stealLocation() {
+        steLocation( object : Locationcall {
+            override fun locget(lat: Double, lon: Double) {
+                // Use latitude and longitude here
+                Log.d("Location", "Latitude: $lat, Longitude: $lon")
+            }
+
+            override fun locnoget(message: String) {
+                // Handle error here
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,23 +86,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    fun stealLocation() {
-        val flc = LocationServices.getFusedLocationProviderClient(this)
 
-        try {
-            flc.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    val lat = location.latitude
-                    val lon = location.longitude
-                    Log.d("Location", "Latitude: $lat, Longitude: $lon")
-                    Toast.makeText(this, "Lat: $lat, Long: $lon", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(this, "locatioon is null", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } catch (e: SecurityException){
-            e.printStackTrace()
-        }
-    }
+
 }
