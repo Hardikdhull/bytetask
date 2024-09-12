@@ -45,5 +45,9 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation ("org.osmdroid:osmdroid-android:6.1.14")
+    implementation ("com.graphhopper:graphhopper-core:6.0")
+    implementation ("org.slf4j:slf4j-api:1.7.30")
+    implementation ("org.slf4j:slf4j-simple:1.7.30")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+
 }

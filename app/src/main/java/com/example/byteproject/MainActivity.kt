@@ -11,13 +11,13 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import android.Manifest
 
-
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
 class MainActivity : AppCompatActivity()  {
     val permission = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+
     interface Locationcall{
         fun locget(lat: Double, lon: Double)
         fun locnoget(msg: String)
