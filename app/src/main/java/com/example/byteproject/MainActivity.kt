@@ -11,16 +11,12 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import android.Manifest
 
-
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-
 
 class MainActivity : AppCompatActivity() {
     val permission = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION
-
     )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,9 +34,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             stealLocation()
         }
-
     }
-
     override fun onRequestPermissionsResult(
         requestcode: Int,
         permission: Array<out String>,
@@ -55,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     fun stealLocation() {
         val flc = LocationServices.getFusedLocationProviderClient(this)
 
@@ -71,8 +64,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "locatioon is null", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
         } catch (e: SecurityException){
             e.printStackTrace()
         }
