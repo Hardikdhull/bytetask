@@ -62,7 +62,7 @@ class Mapsapi(private val context: Context, private val mapskey: GraphHopper,pri
             val time = path.time
 
         } else {
-
+            Log.e("GraphHopper", "Error: ${response.errors.joinToString()}")
         }
     }
 }
