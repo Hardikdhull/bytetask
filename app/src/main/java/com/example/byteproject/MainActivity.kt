@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationServices
 import android.Manifest
 import com.graphhopper.GraphHopper
 
+
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
 class MainActivity : AppCompatActivity()  {
@@ -20,41 +21,7 @@ class MainActivity : AppCompatActivity()  {
     )
     public var i = 0
 
-    interface Locationcall{
-        fun locget (lat: Double, lon: Double)
-        fun locnoget (msg: String)
-    }
 
-    fun steLocation(cal: Locationcall) {
-        val flc = LocationServices.getFusedLocationProviderClient(this)
-
-        try {
-            flc.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    val lat = location.latitude
-                    val lon = location.longitude
-                    cal.locget(lat, lon)
-                } else {
-                    cal.locnoget("loction provided is not provided")
-                }
-            }
-        } catch (e: SecurityException){
-            e.printStackTrace()
-        }
-    }
-    fun stealLocation() {
-        steLocation( object : Locationcall {
-            override fun locget(lat: Double, lon: Double) {
-                // Use latitude and longitude here
-                Log.d("Location", "Latitude: $lat, Longitude: $lon")
-            }
-
-            override fun locnoget(message: String) {
-                // Handle error here
-                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
 private lateinit var mapapi : Mapsapi
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +62,57 @@ private lateinit var mapapi : Mapsapi
                 Toast.makeText(this, "location permission denied", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    interface Locationcall{
+        fun locget (lat: Double, lon: Double)
+        fun locnoget (msg: String)
+    }
+
+    fun steLocation(cal: Locationcall) {
+        val flc = LocationServices.getFusedLocationProviderClient(this)
+
+        try {
+            flc.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val lat = location.latitude
+                    val lon = location.longitude
+                    cal.locget(lat, lon)
+                } else {
+
+                    val locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
+                        priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+                        interval = 1000
+                        fastestInterval = 500
+                    }
+                    flc.requestLocationUpdates(locationRequest, object : com.google.android.gms.location.LocationCallback() {
+                        override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
+                            locationResult.let {
+                                val newLocation = it.lastLocation
+                                if (newLocation != null) {
+                                    cal.locget(newLocation.latitude, newLocation.longitude)
+                                }
+                            }
+                        }
+                    }, null)
+                }
+            }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+
+    fun stealLocation() {
+        steLocation( object : Locationcall {
+            override fun locget(lat: Double, lon: Double) {
+                Log.d("Location", "Latitude: $lat, Longitude: $lon")
+                Toast.makeText(this@MainActivity, "Latitude: $lat, Longitude: $lon", Toast.LENGTH_LONG).show()
+            }
+
+            override fun locnoget(message: String) {
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 
