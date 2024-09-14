@@ -97,8 +97,8 @@ class MainActivity : AppCompatActivity()  {
                         fastestInterval = 500
                     }
                     flc.requestLocationUpdates(locationRequest, object : com.google.android.gms.location.LocationCallback() {
-                        override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
-                            locationResult.let {
+                        override fun onLocationResult(locResult: com.google.android.gms.location.LocationResult) {
+                            locResult.let {
                                 val newLocation = it.lastLocation
                                 if (newLocation != null) {
                                     cal.locget(newLocation.latitude, newLocation.longitude)
@@ -117,6 +117,15 @@ class MainActivity : AppCompatActivity()  {
             override fun locget(lat: Double, lon: Double) {
                 Log.d("Location", "Latitude: $lat, Longitude: $lon")
                 Toast.makeText(this@MainActivity, "Latitude: $lat, Longitude: $lon", Toast.LENGTH_LONG).show()
+                loclist.add(Pair(lat,lon))
+                val l = GeoPoint(lat, lon)
+                val mark = Marker(map)
+                mark.position = l
+                mark.title = "your location"
+                map.overlays.add(mark)
+                map.controller.setZoom(21)
+                map.controller.setCenter(l)
+
             }
 
             override fun locnoget(message: String) {
