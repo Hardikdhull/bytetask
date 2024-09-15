@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import android.Manifest
 import android.preference.PreferenceManager
+import android.widget.Button
+import android.widget.TextView
 import com.graphhopper.GraphHopper
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -22,12 +24,14 @@ private const val LOCATION_PERMISSION_REQUEST_CODE = 1
 class MainActivity : AppCompatActivity()  {
     private lateinit var map: MapView
     private var loclist =  ArrayList<Pair<Double,Double>>()
+    private val dbHelper = Datastore(this)
     val permission = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
     public var i = 0
 
-
+    private lateinit var so: TextView
+    private lateinit var sb: Button
     private lateinit var mapapi : Mapsapi
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +42,11 @@ class MainActivity : AppCompatActivity()  {
             applicationContext,
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
         )
-
-        setContentView(R.layout.activity_main)
+        so = findViewById(R.id.stored_locations_text)
+        sb = findViewById(R.id.show_locations_button)
+        sb.setOnClickListener {
+            showloc()
+        }
         map = findViewById(R.id.map)
         map.setBuiltInZoomControls(true)
         map.setMultiTouchControls(true)
@@ -117,6 +124,7 @@ class MainActivity : AppCompatActivity()  {
             override fun locget(lat: Double, lon: Double) {
                 Log.d("Location", "Latitude: $lat, Longitude: $lon")
                 Toast.makeText(this@MainActivity, "Latitude: $lat, Longitude: $lon", Toast.LENGTH_LONG).show()
+                dbHelper.insertloc(lat, lon)
                 loclist.add(Pair(lat,lon))
                 val l = GeoPoint(lat, lon)
                 val mark = Marker(map)
@@ -125,13 +133,29 @@ class MainActivity : AppCompatActivity()  {
                 map.overlays.add(mark)
                 map.controller.setZoom(21)
                 map.controller.setCenter(l)
-
             }
-
             override fun locnoget(message: String) {
                 Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    fun showloc(){
+        val locationis = dbHelper.getAllLoc()
+
+
+
+        val stl = StringBuilder()
+
+        if (locationis.isNotEmpty()) {
+            for (location in locationis) {
+                val (lat, lon) = location
+                stl.append("Lat: $lat, Lon: $lon\n")
+            }
+            so.text = stl.toString()
+        } else {
+            so.text = "No locations stored"
+        }
+
     }
     override fun onStart() {
         super.onStart()

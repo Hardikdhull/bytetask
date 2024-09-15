@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.osmdroid.views.MapView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/map"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="16dp">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="497dp" />
+
+    <Button
+        android:id="@+id/show_locations_button"
+        android:layout_width="366dp"
+        android:layout_height="wrap_content"
+        android:text="Show Stored Locations" />
+
+    <TextView
+        android:id="@+id/stored_locations_text"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:text="Stored Locations will appear here" />
+</LinearLayout>
+
+
 
