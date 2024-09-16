@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import android.Manifest
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.TextView
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var so: TextView
     private lateinit var sb: Button
     private lateinit var mapapi : Mapsapi
+    private lateinit var sbc: Button
+    private lateinit var cords: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +47,13 @@ class MainActivity : AppCompatActivity()  {
         )
         so = findViewById(R.id.stored_locations_text)
         sb = findViewById(R.id.show_locations_button)
+        sbc = findViewById(R.id.show_coordinate_button)
+        cords = findViewById(R.id.coordinates)
         sb.setOnClickListener {
             showloc()
+        }
+        sbc.setOnClickListener{
+
         }
         map = findViewById(R.id.map)
         map.setBuiltInZoomControls(true)
@@ -92,30 +100,24 @@ class MainActivity : AppCompatActivity()  {
     fun steLocation(cal: Locationcall) {
         val flc = LocationServices.getFusedLocationProviderClient(this)
         try {
-            flc.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    val lat = location.latitude
-                    val lon = location.longitude
-                    cal.locget(lat, lon)
-                } else {
-                    val locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
-                        priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-                        interval = 1000
-                        fastestInterval = 500
-                    }
-                    flc.requestLocationUpdates(locationRequest, object : com.google.android.gms.location.LocationCallback() {
-                        override fun onLocationResult(locResult: com.google.android.gms.location.LocationResult) {
-                            locResult.let {
-                                val newLocation = it.lastLocation
-                                if (newLocation != null) {
-                                    cal.locget(newLocation.latitude, newLocation.longitude)
-                                }
-                            }
+            val locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
+                priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+                interval = 4000
+                fastestInterval = 500
+            }
+            val ab = object: com.google.android.gms.location.LocationCallback() {
+                override fun onLocationResult(locResult: com.google.android.gms.location.LocationResult) {
+                    locResult.let {
+                        val newLocation = it.lastLocation
+                        if (newLocation != null) {
+                            cal.locget(newLocation.latitude, newLocation.longitude)
                         }
-                    }, null)
+                    }
                 }
             }
-        } catch (e: SecurityException) {
+            flc.requestLocationUpdates(locationRequest, ab, Looper.getMainLooper())
+        }
+        catch (e: SecurityException) {
             e.printStackTrace()
         }
     }
@@ -123,16 +125,17 @@ class MainActivity : AppCompatActivity()  {
         steLocation( object : Locationcall {
             override fun locget(lat: Double, lon: Double) {
                 Log.d("Location", "Latitude: $lat, Longitude: $lon")
-                Toast.makeText(this@MainActivity, "Latitude: $lat, Longitude: $lon", Toast.LENGTH_LONG).show()
                 dbHelper.insertloc(lat, lon)
                 loclist.add(Pair(lat,lon))
                 val l = GeoPoint(lat, lon)
                 val mark = Marker(map)
                 mark.position = l
                 mark.title = "your location"
+                map.overlays.clear()
                 map.overlays.add(mark)
                 map.controller.setZoom(21)
                 map.controller.setCenter(l)
+                cords.text = "current lat: $lat, lon: $lon"
             }
             override fun locnoget(message: String) {
                 Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
@@ -141,11 +144,7 @@ class MainActivity : AppCompatActivity()  {
     }
     fun showloc(){
         val locationis = dbHelper.getAllLoc()
-
-
-
         val stl = StringBuilder()
-
         if (locationis.isNotEmpty()) {
             for (location in locationis) {
                 val (lat, lon) = location
@@ -178,5 +177,3 @@ class MainActivity : AppCompatActivity()  {
         map.onDetach()
     }
 }
-
-

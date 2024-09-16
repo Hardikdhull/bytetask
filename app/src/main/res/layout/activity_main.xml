@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:padding="16dp">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <org.osmdroid.views.MapView
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="497dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="522dp" />
 
-    <Button
-        android:id="@+id/show_locations_button"
-        android:layout_width="366dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Stored Locations" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/stored_locations_text"
+        <Button
+            android:id="@+id/show_locations_button"
+            android:layout_width="177dp"
+            android:layout_height="wrap_content"
+            android:text="Show Stored Locations" />
+
+        <Button
+            android:id="@+id/show_coordinate_button"
+            android:layout_width="176dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:text="show coordinates" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="152dp"
-        android:text="Stored Locations will appear here" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/stored_locations_text"
+            android:layout_width="181dp"
+            android:layout_height="match_parent"
+            android:text="Stored Locations will appear here" />
+
+        <TextView
+            android:id="@+id/coordinates"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Lat: 0.0, Lon: 0.0" />
+    </LinearLayout>
 </LinearLayout>
-
-
-

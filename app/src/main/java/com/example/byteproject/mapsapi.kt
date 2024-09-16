@@ -1,27 +1,17 @@
 package com.example.byteproject
 
-import android.Manifest
 import android.location.Location
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
-import android.health.connect.datatypes.ExerciseRoute
 import android.os.Looper
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.Callback
-import java.io.IOException
 import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.graphhopper.GHRequest
-import com.graphhopper.GHResponse
 import com.graphhopper.GraphHopper
 
 val mainkt = MainActivity()
