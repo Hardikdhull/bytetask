@@ -1,7 +1,6 @@
 package com.example.byteproject
 
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -26,9 +25,6 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var map: MapView
     private var loclist =  ArrayList<Pair<Double,Double>>()
     private val dbHelper = Datastore(this)
-    val permission = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
     public var i = 0
 
     private lateinit var so: TextView
