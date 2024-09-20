@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
 import android.database.Cursor
 
+
 class Datastore(context: Context) :
     SQLiteOpenHelper(context, NAME, null, VERSION) {
     companion object {
@@ -45,6 +46,7 @@ class Datastore(context: Context) :
             } while (cursor.moveToNext())
         }
         cursor.close()
+        db.close()
         return locationList
     }
 }
