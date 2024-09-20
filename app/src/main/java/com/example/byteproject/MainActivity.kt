@@ -150,7 +150,6 @@ class MainActivity : AppCompatActivity()  {
         } else {
             so.text = "No locations stored"
         }
-
     }
     override fun onStart() {
         super.onStart()
