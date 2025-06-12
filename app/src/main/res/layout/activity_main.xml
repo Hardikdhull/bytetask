@@ -4,47 +4,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#f5f5f5">
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/map"
-        android:layout_width="wrap_content"
-        android:layout_height="522dp" />
+    <!-- Map Container with subtle border -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/map_border"
+        android:padding="2dp"
+        android:layout_marginBottom="16dp">
 
+        <org.osmdroid.views.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <!-- Buttons Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
 
         <Button
             android:id="@+id/show_locations_button"
-            android:layout_width="177dp"
-            android:layout_height="wrap_content"
-            android:text="Show Stored Locations" />
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Show Locations"
+            android:textSize="14sp"
+            android:background="@drawable/button_background"
+            android:textColor="@color/button_text"
+            android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/show_coordinate_button"
-            android:layout_width="176dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:text="show coordinates" />
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Show Coordinates"
+            android:textSize="14sp"
+            android:background="@drawable/button_background"
+            android:textColor="@color/button_text"
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 
+    <!-- Information Display Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/info_panel_background"
+        android:padding="12dp"
+        android:minHeight="120dp">
 
-        <TextView
-            android:id="@+id/stored_locations_text"
-            android:layout_width="181dp"
+        <ScrollView
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="Stored Locations will appear here" />
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:id="@+id/stored_locations_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stored Locations will appear here"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:padding="8dp"
+                android:background="@drawable/text_background"
+                android:minHeight="80dp" />
+        </ScrollView>
 
         <TextView
             android:id="@+id/coordinates"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Lat: 0.0, Lon: 0.0" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Lat: 0.0\nLon: 0.0"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:padding="8dp"
+            android:background="@drawable/text_background"
+            android:gravity="center"
+            android:minHeight="80dp"
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 </LinearLayout>
